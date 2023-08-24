@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useCallback, useState } from "react"
+import Slider from 'react-input-slider'
 
-function App() {
+import { Timer } from "./Components/Timer"
+
+const App = () => {
+  const [workTime, setWorkTime] = useState({ x: 10 })
+  const [ mode, setMode ] = useState('PAUSE') // PLAY, END
+
+  const handleSliderChange = useCallback(( { x } ) => {setWorkTime( state => ({ ...state, x}) )}, []); 
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Timer 
+        mode={mode}
+        setMode={setMode}
+        workTime={workTime.x}
+      />
+      {workTime.x} minutes
+      <br />
+      <Slider
+        axis="x"
+        x={workTime.x}
+        onChange={handleSliderChange}
+        xmin={5}
+        xmax={90}
+        xstep={5}
+      />
+      <br />
+      <button 
+        onClick={() => {
+            setMode('PLAY') 
+            // setTotalTime(workTime.x)
+          }
+        }
+      >set worktime</button>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
